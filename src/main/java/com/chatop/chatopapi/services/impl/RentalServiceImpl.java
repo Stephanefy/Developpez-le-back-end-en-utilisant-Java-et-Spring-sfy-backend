@@ -4,9 +4,11 @@ import com.chatop.chatopapi.model.Rental;
 import com.chatop.chatopapi.repository.RentalRepository;
 import com.chatop.chatopapi.services.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class RentalServiceImpl implements RentalService {
     @Autowired
     private RentalRepository rentalRepository;
@@ -25,7 +27,7 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public Rental createRental(Rental rental) {
-        return null;
+        return rentalRepository.save(rental);
     }
 
     @Override

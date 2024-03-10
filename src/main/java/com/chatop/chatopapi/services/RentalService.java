@@ -1,11 +1,9 @@
 package com.chatop.chatopapi.services;
 
 import com.chatop.chatopapi.model.Rental;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
 public interface RentalService {
 
      List<Rental> findAllRentals();

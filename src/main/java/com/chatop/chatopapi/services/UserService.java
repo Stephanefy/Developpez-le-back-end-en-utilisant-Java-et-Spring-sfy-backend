@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
 
-     User getUserDetails();
+     User getUserDetails(String email);
 
      <Optional> java.util.Optional<User> getUserByid(Integer id);
+
+
 
 
 }

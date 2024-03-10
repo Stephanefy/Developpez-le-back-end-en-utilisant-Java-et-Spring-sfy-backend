@@ -28,7 +28,7 @@ public class Rental {
 
     private double price;
 
-    private List<String> picture;
+    private String picture;
 
     @Column(length = 1024) // To allow for a longer description
     private String description;
@@ -57,6 +57,8 @@ public class Rental {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now(); // Automatically update the timestamp when the entity is updated
     }
+
+
 
 
     // Getters and Setters

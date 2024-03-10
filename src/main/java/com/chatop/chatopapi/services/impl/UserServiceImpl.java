@@ -18,15 +18,12 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public User getUserDetails() {
+    public User getUserDetails(String email) {
         // Get the authentication object from the security context
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        // Extract username or user ID from authentication object
-        String username = authentication.getName();
-
         // Fetch and return the user details from the repository
-        return userRepository.findByUsername(username).orElseThrow();
+        return userRepository.findByEmail(email).orElseThrow();
     }
 
     @Override
