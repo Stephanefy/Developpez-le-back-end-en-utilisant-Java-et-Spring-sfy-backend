@@ -15,12 +15,12 @@ public class RentalServiceImpl implements RentalService {
 
     @Override
     public List<Rental> findAllRentals() {
-       return rentalRepository.findAll();
+        return rentalRepository.findAll();
     }
 
 
     @Override
-    public Rental findRentalById(String rentalId){
+    public Rental findRentalById(String rentalId) {
         Integer parsedId = Integer.valueOf(rentalId);
         return rentalRepository.findById(parsedId).get();
     }
@@ -35,7 +35,7 @@ public class RentalServiceImpl implements RentalService {
 
         Integer parsedId = Integer.valueOf(id);
 
-        return  rentalRepository.findById(parsedId).map(rental ->{
+        return rentalRepository.findById(parsedId).map(rental -> {
             rental.setName(newRental.getName());
             rental.setPrice(newRental.getPrice());
             rental.setDescription(newRental.getDescription());

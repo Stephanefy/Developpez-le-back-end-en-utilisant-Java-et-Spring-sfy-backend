@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 
@@ -28,7 +30,6 @@ import java.util.stream.Collectors;
 public class RentalRestController {
 
     private final Logger logger = LogManager.getLogger(AuthRestController.class);
-
 
     @Autowired
     private RentalService rentalService;
@@ -40,35 +41,28 @@ public class RentalRestController {
     private StorageService storageService;
 
     @GetMapping("")
-    public ResponseEntity<RentalsResponse> getAllRentals(){
+    public ResponseEntity<RentalsResponse> getAllRentals() {
         List<Rental> rentals = rentalService.findAllRentals();
 
-        List<RentalDto> rentalsDto = (List<RentalDto>) rentals.stream().map(
-                rental -> modelMapper.map(rental, RentalDto.class)).collect(Collectors.toList());
+        List<RentalDto> rentalsDto = (List<RentalDto>) rentals.stream().map(rental -> modelMapper.map(rental, RentalDto.class)).collect(Collectors.toList());
 
         RentalsResponse response = new RentalsResponse(rentalsDto);
 
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping(path = "", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
-    public ResponseEntity<String> addNewRental(@RequestParam("name") String name,
-                                               @RequestParam("surface") Double surface,
-                                               @RequestParam("price") BigDecimal price,
-                                               @RequestParam("description") String description,
-                                               @RequestPart(value = "picture", required = false) MultipartFile picture,
-                                               @RequestHeader("Authorization") String authorizationHeader
-                                               ) {
+    @PostMapping(path = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Map<String, String>> addNewRental(@RequestParam("name") String name, @RequestParam("surface") Double surface, @RequestParam("price") BigDecimal price, @RequestParam("description") String description, @RequestPart(value = "picture", required = false) MultipartFile picture, @RequestHeader("Authorization") String authorizationHeader) {
 
         // get owner_id in token
         String token = authorizationHeader.substring(7);
         Integer ownerId = JWTUtils.extractId(token);
 
         // get picture file path
-        String  picturePath = (picture != null ? picture.getOriginalFilename() : "No picture uploaded");
+        String picturePath = (picture != null ? picture.getOriginalFilename() : "No picture uploaded");
 
         // create a Rental DTO from request params
-        NewRentalDto rentalDto = new NewRentalDto(name,surface,price,picturePath,description, ownerId);
+        NewRentalDto rentalDto = new NewRentalDto(name, surface, price, picturePath, description, ownerId);
 
         // convert DTO to Entity then save it in the DB
         Rental rentalEntity = modelMapper.map(rentalDto, Rental.class);
@@ -77,25 +71,35 @@ public class RentalRestController {
         if (insertedRental == null) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity("{\"message\": \"Rental created\"}", HttpStatus.CREATED);
+        Collections.singletonMap("key", "value");
+
+        return ResponseEntity.ok(Collections.singletonMap("message", "rental created"));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Rental> updateRental(@PathVariable String id, @RequestBody Rental newRental) {
+    public ResponseEntity<Map<String, String>> updateRental(@PathVariable String id, @RequestParam("name") String name, @RequestParam("surface") Double surface, @RequestParam("price") BigDecimal price, @RequestParam("description") String description, @RequestPart(value = "picture", required = false) MultipartFile picture, @RequestHeader("Authorization") String authorizationHeader) {
 
-        Rental updatedRental = rentalService.updateRental(id, newRental);
 
-        return new ResponseEntity<Rental>(updatedRental, HttpStatus.OK);
+        String picturePath = (picture != null ? picture.getOriginalFilename() : "No picture uploaded");
+
+        NewRentalDto newRentalDto = new NewRentalDto(name, surface, price, picturePath, description, Integer.parseInt(id));
+        Rental newRentalEntity = modelMapper.map(newRentalDto, Rental.class);
+
+        Rental updatedRental = rentalService.updateRental(id, newRentalEntity);
+
+
+        return ResponseEntity.ok(Collections.singletonMap("message", "rental updated"));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Rental> findRentalById(@PathVariable String id) {
+    public ResponseEntity<RentalDto> findRentalById(@PathVariable String id) {
         Rental foundRental = rentalService.findRentalById(id);
+        RentalDto rentalDto = modelMapper.map(foundRental, RentalDto.class);
 
         if (foundRental == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<Rental>(foundRental, HttpStatus.OK);
+        return ResponseEntity.ok(rentalDto);
     }
 }

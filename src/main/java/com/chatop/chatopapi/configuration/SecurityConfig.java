@@ -50,8 +50,8 @@ public class SecurityConfig {
         return httpSecurity.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers(HttpMethod.POST,"/api/auth/register").permitAll()
-                                .requestMatchers(HttpMethod.POST,"/api/auth/login").permitAll()
+                        request.requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .authenticationManager(authenticationManager)
@@ -65,8 +65,6 @@ public class SecurityConfig {
         authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
         return authenticationManagerBuilder.build();
     }
-
-
 
 
     @Bean

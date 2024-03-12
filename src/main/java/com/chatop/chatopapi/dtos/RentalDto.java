@@ -1,8 +1,10 @@
 package com.chatop.chatopapi.dtos;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 
@@ -28,9 +30,11 @@ public class RentalDto {
 
     private Integer ownerId;
 
-    private Optional<String> createdAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
+    private Optional<LocalDateTime> createdAt;
 
-    private Optional<String> updatedAt;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy/MM/dd")
+    private Optional<LocalDateTime> updatedAt;
 
 
 }

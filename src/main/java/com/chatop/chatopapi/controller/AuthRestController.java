@@ -44,17 +44,12 @@ public class AuthRestController {
     private ModelMapper modelMapper;
 
 
-
     @PostMapping(path = "/register")
     public ResponseEntity<TokenResponse> register(@RequestBody RegisterDto registerDto) {
 
         User convertedUserDto = convertToUserEntity(registerDto);
         User registeredUser = authService.register(convertedUserDto);
-        String token = JWTUtils.generateToken(
-                registeredUser.getEmail(),
-                registeredUser.getUsername(),
-                registeredUser.getId()
-        );
+        String token = JWTUtils.generateToken(registeredUser.getEmail(), registeredUser.getUsername(), registeredUser.getId());
         TokenResponse tokenResponse = new TokenResponse(token);
 
         return ResponseEntity.ok(tokenResponse);
@@ -84,19 +79,13 @@ public class AuthRestController {
         Optional<User> currentUser = userService.getUserByid(userId);
 
         if (currentUser.isPresent()) {
-            UserDto userDto = new UserDto(
-                    currentUser.get().getId(),
-                    currentUser.get().getUsername(),
-                    currentUser.get().getCreatedAt().toLocalDate().toString().replace("-", "/"),
-                    currentUser.get().getUpdatedAt().toLocalDate().toString().replace("-", "/")
-                    );
+            UserDto userDto = new UserDto(currentUser.get().getId(), currentUser.get().getUsername(), currentUser.get().getCreatedAt().toLocalDate().toString().replace("-", "/"), currentUser.get().getUpdatedAt().toLocalDate().toString().replace("-", "/"));
 
             return ResponseEntity.ok(userDto);
         }
 
         return ResponseEntity.notFound().build();
     }
-
 
 
     private RegisterDto convertToUserDto(User user) {
