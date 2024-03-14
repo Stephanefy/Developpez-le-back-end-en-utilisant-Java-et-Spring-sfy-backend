@@ -1,6 +1,6 @@
 package com.chatop.chatopapi.responses;
 
-import com.chatop.chatopapi.dtos.RentalDto;
+import com.chatop.chatopapi.dtos.rentalDTOs.RentalDto;
 
 import java.util.List;
 

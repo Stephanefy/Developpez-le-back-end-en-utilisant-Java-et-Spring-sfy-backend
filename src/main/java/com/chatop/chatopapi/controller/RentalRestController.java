@@ -1,13 +1,17 @@
 package com.chatop.chatopapi.controller;
 
 
-import com.chatop.chatopapi.dtos.NewRentalDto;
-import com.chatop.chatopapi.dtos.RentalDto;
+import com.chatop.chatopapi.dtos.rentalDTOs.NewRentalDto;
+import com.chatop.chatopapi.dtos.rentalDTOs.RentalDto;
+import com.chatop.chatopapi.exceptions.NotFoundException;
 import com.chatop.chatopapi.model.Rental;
 import com.chatop.chatopapi.responses.RentalsResponse;
 import com.chatop.chatopapi.services.RentalService;
 import com.chatop.chatopapi.services.StorageService;
 import com.chatop.chatopapi.utils.JWTUtils;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -22,9 +26,13 @@ import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-
+@Tag(
+        name = "CRUD REST APIs for Rental data processing",
+        description = "Provides CREATE, GET and PUT operations for rental properties"
+)
 @RestController
 @RequestMapping("api/rentals")
 public class RentalRestController {
@@ -40,6 +48,14 @@ public class RentalRestController {
     @Autowired
     private StorageService storageService;
 
+    @Operation(
+            summary = "Get all rental properties REST API",
+            description = "This endpoint return all rental properties recorded in the database"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status 200 OK"
+    )
     @GetMapping("")
     public ResponseEntity<RentalsResponse> getAllRentals() {
         List<Rental> rentals = rentalService.findAllRentals();
@@ -50,7 +66,14 @@ public class RentalRestController {
 
         return ResponseEntity.ok(response);
     }
-
+    @Operation(
+            summary = "add a new rental property REST API",
+            description = "Endpoint for creating a new rental property in the database"
+    )
+    @ApiResponse(
+            responseCode = "201",
+            description = "HTTP Status 201 CREATED"
+    )
     @PostMapping(path = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Map<String, String>> addNewRental(@RequestParam("name") String name, @RequestParam("surface") Double surface, @RequestParam("price") BigDecimal price, @RequestParam("description") String description, @RequestPart(value = "picture", required = false) MultipartFile picture, @RequestHeader("Authorization") String authorizationHeader) {
 
@@ -58,11 +81,14 @@ public class RentalRestController {
         String token = authorizationHeader.substring(7);
         Integer ownerId = JWTUtils.extractId(token);
 
-        // get picture file path
-        String picturePath = (picture != null ? picture.getOriginalFilename() : "No picture uploaded");
+        // store image locally and get picture relative path
+        String absolutePath = (picture != null ? storageService.store(picture) : "No picture" );
+        String pictureRelativePath = convertPictureToRelativePath(absolutePath);
+
+        logger.info("Absolute Path {}", absolutePath);
 
         // create a Rental DTO from request params
-        NewRentalDto rentalDto = new NewRentalDto(name, surface, price, picturePath, description, ownerId);
+        NewRentalDto rentalDto = new NewRentalDto(name, surface, price, pictureRelativePath, description, ownerId);
 
         // convert DTO to Entity then save it in the DB
         Rental rentalEntity = modelMapper.map(rentalDto, Rental.class);
@@ -75,31 +101,51 @@ public class RentalRestController {
 
         return ResponseEntity.ok(Collections.singletonMap("message", "rental created"));
     }
-
+    @Operation(
+            summary = "Update a rental property REST API",
+            description = "endpoint for updating a rental property that is retrieved by its ID"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status 200 OK"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<Map<String, String>> updateRental(@PathVariable String id, @RequestParam("name") String name, @RequestParam("surface") Double surface, @RequestParam("price") BigDecimal price, @RequestParam("description") String description, @RequestPart(value = "picture", required = false) MultipartFile picture, @RequestHeader("Authorization") String authorizationHeader) {
 
 
-        String picturePath = (picture != null ? picture.getOriginalFilename() : "No picture uploaded");
+        String absolutePath = (picture != null ? storageService.store(picture) : "No picture" );
+        String pictureRelativePath = convertPictureToRelativePath(absolutePath);
 
-        NewRentalDto newRentalDto = new NewRentalDto(name, surface, price, picturePath, description, Integer.parseInt(id));
+        NewRentalDto newRentalDto = new NewRentalDto(name, surface, price, pictureRelativePath, description, Integer.parseInt(id));
         Rental newRentalEntity = modelMapper.map(newRentalDto, Rental.class);
 
-        Rental updatedRental = rentalService.updateRental(id, newRentalEntity);
+        Optional<Rental> updatedRental = rentalService.updateRental(id, newRentalEntity);
+
+        logger.info("updated Rental {}", updatedRental);
 
 
         return ResponseEntity.ok(Collections.singletonMap("message", "rental updated"));
     }
+    @Operation(
+            summary = "Retrieve a rental property details REST API",
+            description = "endpoint for retrieving information about a particular rental property"
+    )
+    @ApiResponse(
+            responseCode = "200",
+            description = "HTTP Status 200 OK"
+    )
 
     @GetMapping("/{id}")
-    public ResponseEntity<RentalDto> findRentalById(@PathVariable String id) {
+    public ResponseEntity<RentalDto> findRentalById(@PathVariable String id) throws NotFoundException {
         Rental foundRental = rentalService.findRentalById(id);
         RentalDto rentalDto = modelMapper.map(foundRental, RentalDto.class);
 
-        if (foundRental == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
         return ResponseEntity.ok(rentalDto);
+    }
+
+
+    private String convertPictureToRelativePath(String absolutePath) {
+        String[] parts = absolutePath.split("src/main/resources");
+        return parts[1];
     }
 }

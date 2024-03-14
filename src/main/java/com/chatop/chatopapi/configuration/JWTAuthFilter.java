@@ -1,5 +1,6 @@
 package com.chatop.chatopapi.configuration;
 
+import com.chatop.chatopapi.controller.AuthRestController;
 import com.chatop.chatopapi.exceptions.AccessDeniedException;
 import com.chatop.chatopapi.services.impl.UserDetailsServiceImpl;
 import com.chatop.chatopapi.utils.JWTUtils;
@@ -8,17 +9,25 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 import java.io.IOException;
 
 @Component
 public class JWTAuthFilter extends OncePerRequestFilter {
+
+    private final Logger logger = LogManager.getLogger(AuthRestController.class);
+
 
     private final UserDetailsServiceImpl userDetailsService;
     private final ObjectMapper objectMapper;
@@ -28,21 +37,39 @@ public class JWTAuthFilter extends OncePerRequestFilter {
         this.objectMapper = objectMapper;
     }
 
+    @Autowired
+    @Qualifier("handlerExceptionResolver")
+    private HandlerExceptionResolver resolver;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        logger.info("Request info {}", request);
+
         try {
             String authHeader = request.getHeader("Authorization");
 
             String token = null;
             String username = null;
+
+
+            if (authHeader == null && !request.getRequestURI().contains("register") && !request.getRequestURI().contains("login") && !request.getRequestURI().contains("swagger-ui") && !request.getRequestURI().contains("chatop-api-docs")
+
+            ) {
+                AccessDeniedException accessDeniedException = new AccessDeniedException("No Authorization header in the request");
+                resolver.resolveException(request, response, null, accessDeniedException);
+                return;
+            }
+
+
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
+
                 token = authHeader.substring(7);
                 username = JWTUtils.extractUsername(token);
             }
 
-//      If the accessToken is null. It will pass the request to next filter in the chain.
-//      Any login and signup requests will not have jwt token in their header, therefore they will be passed to next filter chain.
+            // If the accessToken is null. It will pass the request to next filter in the chain.
+            // Any login and signup requests will not have jwt token in their header, therefore they will be passed to next filter chain.
             if (token == null) {
                 filterChain.doFilter(request, response);
                 return;
@@ -60,17 +87,9 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
             filterChain.doFilter(request, response);
         } catch (AccessDeniedException e) {
-//            ApiErrorResponse errorResponse = new ApiErrorResponse(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-//            response.getWriter().write(toJson(errorResponse));
+            resolver.resolveException(request, response, null, e);
+
         }
     }
 
-//    private String toJson(ApiErrorResponse response) {
-//        try {
-//            return objectMapper.writeValueAsString(response);
-//        } catch (Exception e) {
-//            return ""; // Return an empty string if serialization fails
-//        }
-//    }
 }

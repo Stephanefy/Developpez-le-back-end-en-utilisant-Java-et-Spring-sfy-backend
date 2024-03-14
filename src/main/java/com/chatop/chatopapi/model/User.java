@@ -1,6 +1,7 @@
 package com.chatop.chatopapi.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -32,6 +33,7 @@ public class User implements UserDetails {
 
     @NotBlank(message = "Email is required")
     @Column(name = "email", unique = true, nullable = false, length = 50)
+    @Email
     private String email;
 
     @NotBlank(message = "Password is required")

@@ -1,5 +1,6 @@
 package com.chatop.chatopapi.services.impl;
 
+import com.chatop.chatopapi.exceptions.NotFoundException;
 import com.chatop.chatopapi.model.User;
 import com.chatop.chatopapi.repository.UserRepository;
 import com.chatop.chatopapi.services.UserService;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserByid(Integer id) {
+    public Optional<User> getUserById(Integer id) throws NotFoundException {
         return userRepository.findById(id);
     }
 }

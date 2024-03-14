@@ -1,12 +1,15 @@
-package com.chatop.chatopapi.dtos;
+package com.chatop.chatopapi.dtos.authDTOs;
 
 
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 @AllArgsConstructor
 public class LoginDto {
+
+    @Email
     private String login;
     private String password;
 
@@ -27,6 +30,4 @@ public class LoginDto {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    // toString, hashCode, equals methods could be added for completeness
 }

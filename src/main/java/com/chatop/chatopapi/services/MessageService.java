@@ -1,6 +1,6 @@
 package com.chatop.chatopapi.services;
 
-import com.chatop.chatopapi.dtos.MessageDto;
+import com.chatop.chatopapi.dtos.messageDTOs.MessageDto;
 import com.chatop.chatopapi.model.Message;
 import org.springframework.stereotype.Service;
 

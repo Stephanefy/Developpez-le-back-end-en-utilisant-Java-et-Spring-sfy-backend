@@ -1,6 +1,7 @@
 package com.chatop.chatopapi.utils;
 
 import com.chatop.chatopapi.exceptions.AccessDeniedException;
+import com.chatop.chatopapi.exceptions.InvalidTokenException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
@@ -34,9 +35,13 @@ public class JWTUtils {
         return getTokenBody(token).getSubject();
     }
 
-    public static Integer extractId(String token) {
-        Claims claims = getTokenBody(token);
-        return claims.get("userId", Integer.class);
+    public static Integer extractId(String token) throws InvalidTokenException {
+        try {
+            Claims claims = getTokenBody(token);
+            return claims.get("userId", Integer.class);
+        } catch (MalformedJwtException e) {
+            throw new InvalidTokenException("Invalid JWT token");
+        }
     }
 
 

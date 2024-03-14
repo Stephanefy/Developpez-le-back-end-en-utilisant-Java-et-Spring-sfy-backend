@@ -1,4 +1,4 @@
-package com.chatop.chatopapi.dtos;
+package com.chatop.chatopapi.dtos.rentalDTOs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;

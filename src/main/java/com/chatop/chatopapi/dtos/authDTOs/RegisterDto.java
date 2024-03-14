@@ -1,5 +1,6 @@
-package com.chatop.chatopapi.dtos;
+package com.chatop.chatopapi.dtos.authDTOs;
 
+import jakarta.validation.constraints.Email;
 import lombok.*;
 
 @Setter
@@ -10,8 +11,7 @@ import lombok.*;
 @Builder
 public class RegisterDto {
 
-    private Integer id;
-
+    @Email
     private String email;
 
     private String username;

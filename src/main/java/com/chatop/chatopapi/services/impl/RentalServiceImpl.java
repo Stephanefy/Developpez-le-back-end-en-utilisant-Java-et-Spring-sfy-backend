@@ -1,5 +1,6 @@
 package com.chatop.chatopapi.services.impl;
 
+import com.chatop.chatopapi.exceptions.NotFoundException;
 import com.chatop.chatopapi.model.Rental;
 import com.chatop.chatopapi.repository.RentalRepository;
 import com.chatop.chatopapi.services.RentalService;
@@ -7,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RentalServiceImpl implements RentalService {
@@ -22,7 +24,16 @@ public class RentalServiceImpl implements RentalService {
     @Override
     public Rental findRentalById(String rentalId) {
         Integer parsedId = Integer.valueOf(rentalId);
-        return rentalRepository.findById(parsedId).get();
+
+        Rental rental;
+        if (rentalRepository.findById(parsedId).isEmpty()) {
+            throw new NotFoundException("No rental property found");
+        } else {
+            rental = rentalRepository.findById(parsedId).get();
+        }
+
+        return rental;
+
     }
 
     @Override
@@ -31,18 +42,22 @@ public class RentalServiceImpl implements RentalService {
     }
 
     @Override
-    public Rental updateRental(String id, Rental newRental) {
+    public Optional<Rental> updateRental(String id, Rental newRental) {
 
         Integer parsedId = Integer.valueOf(id);
 
-        return rentalRepository.findById(parsedId).map(rental -> {
+        Optional<Rental> updatedRental = rentalRepository.findById(parsedId);
+
+
+        updatedRental.map(rental -> {
             rental.setName(newRental.getName());
             rental.setPrice(newRental.getPrice());
             rental.setDescription(newRental.getDescription());
             rental.setSurface(newRental.getSurface());
 
             return rentalRepository.save(rental);
-        }).orElseGet(() -> rentalRepository.save(newRental));
+        }).orElseThrow();
 
+        return updatedRental;
     }
 }

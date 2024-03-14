@@ -1,6 +1,6 @@
 package com.chatop.chatopapi.services.impl;
 
-import com.chatop.chatopapi.dtos.MessageDto;
+import com.chatop.chatopapi.dtos.messageDTOs.MessageDto;
 import com.chatop.chatopapi.exceptions.NotFoundException;
 import com.chatop.chatopapi.model.User;
 import com.chatop.chatopapi.model.Message;

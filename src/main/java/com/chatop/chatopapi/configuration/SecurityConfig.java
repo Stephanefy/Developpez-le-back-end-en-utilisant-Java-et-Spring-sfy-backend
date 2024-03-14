@@ -29,22 +29,6 @@ public class SecurityConfig {
     private UserRepository userRepository;
 
 
-//    public SecurityConfig(AuthenticationProvider authenticationProvider) {
-//        this.authenticationProvider = authenticationProvider;
-//    }
-
-
-//    @Bean
-//    public JwtDecoder jwtDecoder() {
-//        SecretKeySpec secretKey = new SecretKeySpec(this.jwtKey.getBytes(), 0, this.jwtKey.getBytes().length,"RSA");
-//        return NimbusJwtDecoder.withSecretKey(secretKey).macAlgorithm(MacAlgorithm.HS256).build();
-//    }
-//    @Bean
-//    public JwtEncoder jwtEncoder() {
-//        return new NimbusJwtEncoder(new ImmutableSecret<>(this.jwtKey.getBytes()));
-//    }
-
-
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity, AuthenticationManager authenticationManager) throws Exception {
         return httpSecurity.csrf(csrf -> csrf.disable())
@@ -52,6 +36,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                         request.requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                                 .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/chatop-api-docs/**").permitAll()
+                                .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .authenticationManager(authenticationManager)
@@ -71,12 +57,6 @@ public class SecurityConfig {
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
-//    @Bean
-//    UserDetailsService userDetailsService() {
-//        return username -> userRepository.findByEmail(username)
-//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-//    }
 
 
 }

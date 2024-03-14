@@ -1,4 +1,4 @@
-package com.chatop.chatopapi.dtos;
+package com.chatop.chatopapi.dtos.messageDTOs;
 
 import lombok.*;
 
