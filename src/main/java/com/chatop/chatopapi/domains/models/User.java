@@ -1,4 +1,4 @@
-package com.chatop.chatopapi.model;
+package com.chatop.chatopapi.domains.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -14,8 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of = "id")

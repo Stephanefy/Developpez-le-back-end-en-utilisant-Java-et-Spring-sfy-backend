@@ -1,18 +1,16 @@
-package com.chatop.chatopapi.configuration;
+package com.chatop.chatopapi.security;
 
 
-import com.chatop.chatopapi.model.User;
-import lombok.Getter;
+import com.chatop.chatopapi.domains.models.User;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 public class CustomUserDetails implements UserDetails {
 
     private User user; // Your user model

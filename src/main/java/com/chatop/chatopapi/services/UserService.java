@@ -1,7 +1,7 @@
 package com.chatop.chatopapi.services;
 
 import com.chatop.chatopapi.exceptions.NotFoundException;
-import com.chatop.chatopapi.model.User;
+import com.chatop.chatopapi.domains.models.User;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;

@@ -1,7 +1,7 @@
 package com.chatop.chatopapi.exceptions;
 
 
-import com.chatop.chatopapi.dtos.ApiErrorResponse;
+import com.chatop.chatopapi.domains.models.dtos.ApiErrorResponse;
 import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

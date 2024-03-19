@@ -1,17 +1,14 @@
-package com.chatop.chatopapi.model;
+package com.chatop.chatopapi.domains.models;
 
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @Entity
 @Table(name = "messages")
 public class Message {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

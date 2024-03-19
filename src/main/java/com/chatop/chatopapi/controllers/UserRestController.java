@@ -1,7 +1,7 @@
-package com.chatop.chatopapi.controller;
+package com.chatop.chatopapi.controllers;
 
-import com.chatop.chatopapi.dtos.userDTOs.UserDetailsDto;
-import com.chatop.chatopapi.model.User;
+import com.chatop.chatopapi.domains.models.dtos.userDTOs.UserDetailsDto;
+import com.chatop.chatopapi.domains.models.User;
 import com.chatop.chatopapi.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,7 +24,7 @@ import org.springframework.web.server.ResponseStatusException;
 )
 @NoArgsConstructor
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/user")
 public class UserRestController {
 
 

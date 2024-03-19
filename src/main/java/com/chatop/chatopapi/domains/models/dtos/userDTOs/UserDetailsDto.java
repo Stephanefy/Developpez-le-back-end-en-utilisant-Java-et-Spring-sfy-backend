@@ -1,4 +1,4 @@
-package com.chatop.chatopapi.dtos.userDTOs;
+package com.chatop.chatopapi.domains.models.dtos.userDTOs;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,8 +6,7 @@ import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

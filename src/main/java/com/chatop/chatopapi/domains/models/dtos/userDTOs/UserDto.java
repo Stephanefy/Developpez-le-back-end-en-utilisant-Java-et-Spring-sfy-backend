@@ -1,9 +1,8 @@
-package com.chatop.chatopapi.dtos.userDTOs;
+package com.chatop.chatopapi.domains.models.dtos.userDTOs;
 
 import lombok.*;
 
-@Setter
-@Getter
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

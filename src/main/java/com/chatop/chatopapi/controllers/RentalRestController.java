@@ -1,10 +1,10 @@
-package com.chatop.chatopapi.controller;
+package com.chatop.chatopapi.controllers;
 
 
-import com.chatop.chatopapi.dtos.rentalDTOs.NewRentalDto;
-import com.chatop.chatopapi.dtos.rentalDTOs.RentalDto;
+import com.chatop.chatopapi.domains.models.dtos.rentalDTOs.NewRentalDto;
+import com.chatop.chatopapi.domains.models.dtos.rentalDTOs.RentalDto;
 import com.chatop.chatopapi.exceptions.NotFoundException;
-import com.chatop.chatopapi.model.Rental;
+import com.chatop.chatopapi.domains.models.Rental;
 import com.chatop.chatopapi.responses.RentalsResponse;
 import com.chatop.chatopapi.services.RentalService;
 import com.chatop.chatopapi.services.StorageService;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
         description = "Provides CREATE, GET and PUT operations for rental properties"
 )
 @RestController
-@RequestMapping("api/rentals")
+@RequestMapping("/rentals")
 public class RentalRestController {
 
     private final Logger logger = LogManager.getLogger(AuthRestController.class);
@@ -56,7 +56,7 @@ public class RentalRestController {
             responseCode = "200",
             description = "HTTP Status 200 OK"
     )
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<RentalsResponse> getAllRentals() {
         List<Rental> rentals = rentalService.findAllRentals();
 

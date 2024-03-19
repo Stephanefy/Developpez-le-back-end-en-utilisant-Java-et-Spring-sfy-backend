@@ -2,6 +2,7 @@ package com.chatop.chatopapi.configuration;
 
 
 import com.chatop.chatopapi.repository.UserRepository;
+import com.chatop.chatopapi.security.JWTAuthFilter;
 import com.chatop.chatopapi.services.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -34,8 +35,8 @@ public class SecurityConfig {
         return httpSecurity.csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
-                                .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        request.requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                                .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/chatop-api-docs/**").permitAll()
                                 .requestMatchers(HttpMethod.GET, "/swagger-ui/**").permitAll()
                                 .anyRequest().authenticated()

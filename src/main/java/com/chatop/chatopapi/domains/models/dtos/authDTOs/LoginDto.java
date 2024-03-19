@@ -1,4 +1,4 @@
-package com.chatop.chatopapi.dtos.authDTOs;
+package com.chatop.chatopapi.domains.models.dtos.authDTOs;
 
 
 import jakarta.validation.constraints.Email;

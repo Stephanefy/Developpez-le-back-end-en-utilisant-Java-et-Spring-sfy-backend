@@ -1,6 +1,6 @@
-package com.chatop.chatopapi.configuration;
+package com.chatop.chatopapi.security;
 
-import com.chatop.chatopapi.controller.AuthRestController;
+import com.chatop.chatopapi.controllers.AuthRestController;
 import com.chatop.chatopapi.exceptions.AccessDeniedException;
 import com.chatop.chatopapi.services.impl.UserDetailsServiceImpl;
 import com.chatop.chatopapi.utils.JWTUtils;
@@ -53,9 +53,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             String username = null;
 
 
-            if (authHeader == null && !request.getRequestURI().contains("register") && !request.getRequestURI().contains("login") && !request.getRequestURI().contains("swagger-ui") && !request.getRequestURI().contains("chatop-api-docs")
-
-            ) {
+            if (authHeader == null && !request.getRequestURI().contains("register") && !request.getRequestURI().contains("login") && !request.getRequestURI().contains("swagger-ui") && !request.getRequestURI().contains("chatop-api-docs")) {
                 AccessDeniedException accessDeniedException = new AccessDeniedException("No Authorization header in the request");
                 resolver.resolveException(request, response, null, accessDeniedException);
                 return;

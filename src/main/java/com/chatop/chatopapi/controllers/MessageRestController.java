@@ -1,8 +1,8 @@
-package com.chatop.chatopapi.controller;
+package com.chatop.chatopapi.controllers;
 
 
-import com.chatop.chatopapi.dtos.messageDTOs.MessageDto;
-import com.chatop.chatopapi.model.Message;
+import com.chatop.chatopapi.domains.models.dtos.messageDTOs.MessageDto;
+import com.chatop.chatopapi.domains.models.Message;
 import com.chatop.chatopapi.services.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -27,7 +27,7 @@ import java.util.Map;
         description = "Provides Create message operation for now"
 )
 @RestController
-@RequestMapping("/api/messages")
+@RequestMapping("/messages")
 public class MessageRestController {
 
 

@@ -1,7 +1,7 @@
 package com.chatop.chatopapi.services.impl;
 
 import com.chatop.chatopapi.exceptions.NotFoundException;
-import com.chatop.chatopapi.model.User;
+import com.chatop.chatopapi.domains.models.User;
 import com.chatop.chatopapi.repository.UserRepository;
 import com.chatop.chatopapi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

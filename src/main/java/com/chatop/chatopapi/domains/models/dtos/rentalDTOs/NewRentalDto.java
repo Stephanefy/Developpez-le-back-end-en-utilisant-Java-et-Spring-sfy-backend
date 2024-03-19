@@ -1,10 +1,9 @@
-package com.chatop.chatopapi.dtos.rentalDTOs;
+package com.chatop.chatopapi.domains.models.dtos.rentalDTOs;
 
 import lombok.*;
 
 import java.math.BigDecimal;
-@Getter
-@Setter
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -1,7 +1,7 @@
 package com.chatop.chatopapi.services.impl;
 
 import com.chatop.chatopapi.exceptions.NotFoundException;
-import com.chatop.chatopapi.model.User;
+import com.chatop.chatopapi.domains.models.User;
 import com.chatop.chatopapi.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

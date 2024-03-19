@@ -1,7 +1,7 @@
 package com.chatop.chatopapi.services.impl;
 
 import com.chatop.chatopapi.exceptions.NotFoundException;
-import com.chatop.chatopapi.model.Rental;
+import com.chatop.chatopapi.domains.models.Rental;
 import com.chatop.chatopapi.repository.RentalRepository;
 import com.chatop.chatopapi.services.RentalService;
 import org.springframework.beans.factory.annotation.Autowired;

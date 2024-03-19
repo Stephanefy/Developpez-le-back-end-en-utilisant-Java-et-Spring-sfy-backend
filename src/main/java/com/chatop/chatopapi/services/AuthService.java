@@ -1,7 +1,7 @@
 package com.chatop.chatopapi.services;
 
 
-import com.chatop.chatopapi.model.User;
+import com.chatop.chatopapi.domains.models.User;
 
 public interface AuthService {
 

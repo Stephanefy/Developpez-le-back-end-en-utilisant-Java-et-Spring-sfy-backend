@@ -1,11 +1,11 @@
-package com.chatop.chatopapi.controller;
+package com.chatop.chatopapi.controllers;
 
 
-import com.chatop.chatopapi.dtos.authDTOs.LoginDto;
-import com.chatop.chatopapi.dtos.authDTOs.RegisterDto;
-import com.chatop.chatopapi.dtos.userDTOs.UserDto;
+import com.chatop.chatopapi.domains.models.User;
+import com.chatop.chatopapi.domains.models.dtos.authDTOs.LoginDto;
+import com.chatop.chatopapi.domains.models.dtos.authDTOs.RegisterDto;
+import com.chatop.chatopapi.domains.models.dtos.userDTOs.UserDto;
 import com.chatop.chatopapi.exceptions.NotFoundException;
-import com.chatop.chatopapi.model.User;
 import com.chatop.chatopapi.responses.TokenResponse;
 import com.chatop.chatopapi.services.AuthService;
 import com.chatop.chatopapi.services.UserService;
@@ -30,12 +30,12 @@ import java.util.Optional;
 
 
 @Tag(
-        name = "CRUD REST APIs for Authentication",
+        name = "Authentication API",
         description = "Provides CRUD operations for user authentication, including user registration, user login, and retrieving current user information."
 )
 @NoArgsConstructor
 @RestController
-@RequestMapping("/api/auth")
+@RequestMapping("/auth")
 public class AuthRestController {
 
 

@@ -1,4 +1,4 @@
-package com.chatop.chatopapi.dtos;
+package com.chatop.chatopapi.domains.models.dtos;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 

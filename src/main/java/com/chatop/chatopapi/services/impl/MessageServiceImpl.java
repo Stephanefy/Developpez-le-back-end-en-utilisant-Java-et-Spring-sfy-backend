@@ -1,10 +1,10 @@
 package com.chatop.chatopapi.services.impl;
 
-import com.chatop.chatopapi.dtos.messageDTOs.MessageDto;
+import com.chatop.chatopapi.domains.models.dtos.messageDTOs.MessageDto;
 import com.chatop.chatopapi.exceptions.NotFoundException;
-import com.chatop.chatopapi.model.User;
-import com.chatop.chatopapi.model.Message;
-import com.chatop.chatopapi.model.Rental;
+import com.chatop.chatopapi.domains.models.User;
+import com.chatop.chatopapi.domains.models.Message;
+import com.chatop.chatopapi.domains.models.Rental;
 import com.chatop.chatopapi.repository.MessageRepository;
 import com.chatop.chatopapi.repository.RentalRepository;
 import com.chatop.chatopapi.repository.UserRepository;

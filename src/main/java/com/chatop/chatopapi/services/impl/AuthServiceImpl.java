@@ -1,6 +1,6 @@
 package com.chatop.chatopapi.services.impl;
 
-import com.chatop.chatopapi.model.User;
+import com.chatop.chatopapi.domains.models.User;
 import com.chatop.chatopapi.repository.UserRepository;
 import com.chatop.chatopapi.services.AuthService;
 import org.apache.logging.log4j.LogManager;
