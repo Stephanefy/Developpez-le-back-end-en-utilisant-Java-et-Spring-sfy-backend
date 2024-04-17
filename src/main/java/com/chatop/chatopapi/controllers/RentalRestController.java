@@ -1,10 +1,11 @@
 package com.chatop.chatopapi.controllers;
 
 
+import com.chatop.chatopapi.domains.models.Rental;
 import com.chatop.chatopapi.domains.models.dtos.rentalDTOs.NewRentalDto;
 import com.chatop.chatopapi.domains.models.dtos.rentalDTOs.RentalDto;
+import com.chatop.chatopapi.domains.models.dtos.rentalDTOs.UpdateRentalDto;
 import com.chatop.chatopapi.exceptions.NotFoundException;
-import com.chatop.chatopapi.domains.models.Rental;
 import com.chatop.chatopapi.responses.RentalsResponse;
 import com.chatop.chatopapi.services.RentalService;
 import com.chatop.chatopapi.services.StorageService;
@@ -17,7 +18,6 @@ import org.apache.logging.log4j.Logger;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -74,18 +74,31 @@ public class RentalRestController {
             responseCode = "201",
             description = "HTTP Status 201 CREATED"
     )
-    @PostMapping(path = "", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Map<String, String>> addNewRental(@RequestParam("name") String name, @RequestParam("surface") Double surface, @RequestParam("price") BigDecimal price, @RequestParam("description") String description, @RequestPart(value = "picture", required = false) MultipartFile picture, @RequestHeader("Authorization") String authorizationHeader) {
+    @PostMapping(path = "")
+    public ResponseEntity<Map<String, String>> addNewRental(
+            @RequestParam("name") String name,
+            @RequestParam("surface") Double surface,
+            @RequestParam("price") BigDecimal price,
+            @RequestParam("description") String description,
+            @RequestPart(value = "picture", required = false) MultipartFile picture,
+            @RequestHeader("Authorization") String authorizationHeader)
+        {
 
         // get owner_id in token
         String token = authorizationHeader.substring(7);
         Integer ownerId = JWTUtils.extractId(token);
 
-        // store image locally and get picture relative path
-        String absolutePath = (picture != null ? storageService.store(picture) : "No picture" );
-        String pictureRelativePath = convertPictureToRelativePath(absolutePath);
+        logger.info("picture whereabout {}", picture);
 
-        logger.info("Absolute Path {}", absolutePath);
+        // store image locally and get picture relative path
+            String pictureRelativePath = "";
+            if (!picture.isEmpty()) {
+                String absolutePath = (picture != null ? storageService.store(picture) : "No picture" );
+                pictureRelativePath = convertPictureToRelativePath(absolutePath);
+
+                logger.info("Absolute Path {}", absolutePath);
+            }
+
 
         // create a Rental DTO from request params
         NewRentalDto rentalDto = new NewRentalDto(name, surface, price, pictureRelativePath, description, ownerId);
@@ -113,10 +126,7 @@ public class RentalRestController {
     public ResponseEntity<Map<String, String>> updateRental(@PathVariable String id, @RequestParam("name") String name, @RequestParam("surface") Double surface, @RequestParam("price") BigDecimal price, @RequestParam("description") String description, @RequestPart(value = "picture", required = false) MultipartFile picture, @RequestHeader("Authorization") String authorizationHeader) {
 
 
-        String absolutePath = (picture != null ? storageService.store(picture) : "No picture" );
-        String pictureRelativePath = convertPictureToRelativePath(absolutePath);
-
-        NewRentalDto newRentalDto = new NewRentalDto(name, surface, price, pictureRelativePath, description, Integer.parseInt(id));
+        UpdateRentalDto newRentalDto = new UpdateRentalDto(name, surface, price, description, Integer.parseInt(id));
         Rental newRentalEntity = modelMapper.map(newRentalDto, Rental.class);
 
         Optional<Rental> updatedRental = rentalService.updateRental(id, newRentalEntity);

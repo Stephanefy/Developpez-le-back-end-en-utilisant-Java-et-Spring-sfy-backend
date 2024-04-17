@@ -7,5 +7,4 @@ public interface AuthService {
 
     User register(User user);
 
-//    User login(LoginDto loginDto);
 }

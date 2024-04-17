@@ -33,6 +33,7 @@ public class UserRestController {
 
     @Autowired
     ModelMapper modelMapper;
+
     @Operation(
             summary = "Get a user details REST API",
             description = "Endpoint for returning user details"

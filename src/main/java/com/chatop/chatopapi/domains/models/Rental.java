@@ -48,16 +48,11 @@ public class Rental {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now(); // Set updatedAt on create to ensure it has an initial value
     }
 
     @PreUpdate
     protected void onUpdate() {
-        updatedAt = LocalDateTime.now(); // Automatically update the timestamp when the entity is updated
+        updatedAt = LocalDateTime.now();
     }
 
-
-
-
-    // Getters and Setters
 }

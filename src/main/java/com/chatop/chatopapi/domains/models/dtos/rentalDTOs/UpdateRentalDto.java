@@ -11,15 +11,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class NewRentalDto {
+public class UpdateRentalDto {
 
     private String name;
 
     private Double surface;
 
     private BigDecimal price;
-
-    private String picture;
 
     private String description;
 

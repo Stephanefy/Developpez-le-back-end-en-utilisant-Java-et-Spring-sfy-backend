@@ -41,17 +41,4 @@ public class AuthServiceImpl implements AuthService {
         return registeredUser;
     }
 
-//    @Override
-//    public User login(LoginDto loginDto) {
-//        try {
-//
-//            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getLogin(),loginDto.getPassword()));
-//            logger.info("authentication: {}", authentication);
-//            logger.info("loginDto from authService implementation: {}", loginDto.getPassword());
-//            return authenticatedUser;
-//        } catch (BadCredentialsException e) {
-//            throw e;
-//        }
-//
-//    }
 }

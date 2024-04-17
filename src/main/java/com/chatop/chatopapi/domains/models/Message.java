@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @NoArgsConstructor
 @Entity
@@ -31,5 +33,22 @@ public class Message {
 
     public void setRentalId(Rental rental_id) {
         this.rental_id = rental_id;
+    }
+
+    @Column(name = "created_at") // Ensure the column name follows a consistent naming convention
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at") // Ensure the column name follows a consistent naming convention
+    private LocalDateTime updatedAt;
+
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 }

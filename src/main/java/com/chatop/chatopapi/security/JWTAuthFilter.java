@@ -52,7 +52,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             String token = null;
             String username = null;
 
-
+            // remove filter check for permitted routes
             if (authHeader == null && !request.getRequestURI().contains("register") && !request.getRequestURI().contains("login") && !request.getRequestURI().contains("swagger-ui") && !request.getRequestURI().contains("chatop-api-docs")) {
                 AccessDeniedException accessDeniedException = new AccessDeniedException("No Authorization header in the request");
                 resolver.resolveException(request, response, null, accessDeniedException);
@@ -67,7 +67,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             }
 
             // If the accessToken is null. It will pass the request to next filter in the chain.
-            // Any login and signup requests will not have jwt token in their header, therefore they will be passed to next filter chain.
+            // Any login and signup requests will not have jwt token in their header, therefore they will be passed to next filter chain and return an error
             if (token == null) {
                 filterChain.doFilter(request, response);
                 return;
@@ -82,7 +82,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 }
             }
-
+            // this is 'working' pass through the next filter since the JWT was validated, therefore following filters will allow the request
             filterChain.doFilter(request, response);
         } catch (AccessDeniedException e) {
             resolver.resolveException(request, response, null, e);

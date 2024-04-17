@@ -62,7 +62,8 @@ public class AuthRestController {
             description = "HTTP Status 201 CREATED"
     )
     @PostMapping(path = "/register")
-    public ResponseEntity<TokenResponse> register(@Valid @RequestBody  RegisterDto registerDto)  {
+    public ResponseEntity<TokenResponse> register(@Valid @RequestBody RegisterDto registerDto) {
+
 
         User convertedUserDto = convertToUserEntity(registerDto);
         User registeredUser = authService.register(convertedUserDto);
@@ -71,6 +72,7 @@ public class AuthRestController {
 
         return ResponseEntity.ok(tokenResponse);
     }
+
     @Operation(
             summary = "Login Authentication REST API",
             description = "Login User REST API is used to authenticate user in the database and generate a JWT token that is return in the response"
@@ -94,7 +96,6 @@ public class AuthRestController {
 
         return ResponseEntity.ok(tokenResponse);
     }
-
 
 
     @Operation(
@@ -121,7 +122,7 @@ public class AuthRestController {
             }
 
         } catch (MalformedJwtException e) {
-            logger.info("MALFORMED JWT TOKEN {}", e );
+            logger.info("MALFORMED JWT TOKEN {}", e);
         }
 
         return ResponseEntity.noContent().build();
@@ -139,9 +140,6 @@ public class AuthRestController {
         User user = modelMapper.map(registerDto, User.class);
 
 
-//        if (userDto.getId() != null) {
-//            User oldUser = userService.getUserById(userDto.getId());
-//        }
         return user;
     }
 }

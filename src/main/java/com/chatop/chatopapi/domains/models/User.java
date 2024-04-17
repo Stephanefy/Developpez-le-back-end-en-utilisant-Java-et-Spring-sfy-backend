@@ -56,7 +56,6 @@ public class User implements UserDetails {
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
-        updatedAt = LocalDateTime.now(); // Set updatedAt on create to ensure it has an initial value
     }
 
     @PreUpdate
@@ -90,5 +89,4 @@ public class User implements UserDetails {
     }
 
 
-    // Additional logic for encrypting the password before saving to the database should be handled in the service layer.
 }
