@@ -21,7 +21,7 @@ git clone https://github.com/Stephanefy/Developpez-le-back-end-en-utilisant-Java
 
 2. **Navigate to the prohject**
 ```
-cd chatop-api
+cd Developpez-le-back-end-en-utilisant-Java-et-Spring-sfy-backend
 ```
 
 3. **Build the project**
@@ -38,18 +38,21 @@ Update the src/main/resources/application.properties file with your MySQL databa
 For example:
 Configure your database connection settings in the application.properties or application.yml file in your src/main/resources directory. Specify details like the database URL, username, and password.
 For MySQL configuration in application : 
+```
+# hibernate config
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.datasource.url=jdbc:mysql://localhost:3306/<dbName>
+spring.datasource.username=<dbUser>
+spring.datasource.password=<dbPassword>
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 
-        spring.datasource.url=jdbc:mysql://localhost:3306/{dbName}
-        spring.datasource.username={dbUsername}
-        spring.datasource.password={dbPassword}
-        spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-        spring.jpa.hibernate.ddl-auto=create-drop
-
+```
+    
 
 
 ### Running the application
 
-You can run the application using Maven
+You can run the application using Maven command
 
 ```
 mvn spring-boot:run
