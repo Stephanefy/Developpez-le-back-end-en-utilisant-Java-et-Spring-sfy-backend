@@ -108,10 +108,11 @@ public class AuthRestController {
     )
     @GetMapping("/me")
     public ResponseEntity<UserDto> getMe(@RequestHeader("Authorization") String authorizationHeader) throws NotFoundException {
-        ;
-        // get userId in token
+
         try {
             String token = authorizationHeader.substring(7);
+            // get userId in token
+            logger.info("{}", token);
             Integer userId = JWTUtils.extractId(token);
             Optional<User> currentUser = userService.getUserById(userId);
 

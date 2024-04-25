@@ -24,14 +24,13 @@ public class GlobalExceptionHandler {
 
 
     @ExceptionHandler(value = NotFoundException.class)
-        public ResponseEntity notFoundException(NotFoundException notFoundException) {
+        public ResponseEntity handleNotFoundException(NotFoundException notFoundException) {
             return new ResponseEntity<String>(notFoundException.getMessage(), HttpStatus.NOT_FOUND);
         }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public ResponseEntity <Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+    public ResponseEntity <Map<String, String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        System.out.println("reached");
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
@@ -46,7 +45,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<Map<String, String>> handleInvalidTokenException(DataIntegrityViolationException ex) {
+    public ResponseEntity<Map<String, String>> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", "A user registered with this email is already there");
         return new ResponseEntity<Map<String, String>>(errors, BAD_REQUEST);
@@ -58,26 +57,26 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<Map<String, String>> handleInvalidTokenException(NoSuchElementException ex) {
+    public ResponseEntity<Map<String, String>> handleNoSuchElementException(NoSuchElementException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", ex.getMessage());
         return new ResponseEntity<Map<String, String>>(errors, NOT_FOUND);
     }
 
     @ExceptionHandler(MalformedJwtException.class)
-    public ResponseEntity<String> handleInvalidTokenException(MalformedJwtException ex) {
+    public ResponseEntity<String> handleMalformedJwtException(MalformedJwtException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token provided.");
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<Map<String, String>> handleInvalidTokenException(AccessDeniedException ex) {
+    public ResponseEntity<Map<String, String>> handleAccessDeniedException(AccessDeniedException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put("message", ex.getMessage());
         return new ResponseEntity<Map<String, String>>(errors, UNAUTHORIZED);
     }
 
     @ExceptionHandler(MissingRequestHeaderException.class)
-    public ResponseEntity<String> handleInvalidTokenException(MissingRequestHeaderException ex) {
+    public ResponseEntity<String> handleMissingRequestHeaderException(MissingRequestHeaderException ex) {
         return ResponseEntity.status(UNAUTHORIZED).body("No Authorization header in the request.");
     }
 
