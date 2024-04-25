@@ -37,12 +37,7 @@ tips: you can generate a random base64 key secured enought with this command :
 openssl rand -base64 32
 ```
 
-```
-mvn clean install
-```
-4. **Configure the application (including Database configuration)**
-
-Normally by setting the environment variables in your IDE and running through it you won't need to manually add credentials.
+Normally by setting the environment variables in your IDE and running through it you won't need to manually add credentials for the database.
     
 
 

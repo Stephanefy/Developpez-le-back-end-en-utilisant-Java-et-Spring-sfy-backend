@@ -54,7 +54,7 @@ public class AuthRestController {
     private ModelMapper modelMapper;
 
     @Autowired
-    JWTUtils jwtUtils;
+    private JWTUtils jwtUtils;
 
     @Operation(
             summary = "Register Authentication REST API",

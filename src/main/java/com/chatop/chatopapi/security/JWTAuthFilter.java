@@ -43,7 +43,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 
 
     @Autowired
-    JWTUtils jwtUtils;
+    private JWTUtils jwtUtils;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
