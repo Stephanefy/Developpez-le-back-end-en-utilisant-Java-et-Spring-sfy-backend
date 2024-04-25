@@ -3,39 +3,63 @@ package com.chatop.chatopapi.utils;
 import com.chatop.chatopapi.exceptions.AccessDeniedException;
 import com.chatop.chatopapi.exceptions.InvalidTokenException;
 import io.jsonwebtoken.*;
+import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
 
+
+@Component
 public class JWTUtils {
 
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+
+
+    @Autowired
+    private Environment env;
+
+
+
+    private final Logger logger = LogManager.getLogger(JWTUtils.class);
+    @Value("${JWT_SECRET}")
+    private String jwtSecret;
+
+
     private static final int MINUTES = 60;
 
 
-    public static String generateToken(String email, String username, Integer userId) {
+
+
+
+    public String generateToken(String email, String username, Integer userId) {
         var now = Instant.now();
+
 
         return Jwts.builder()
                 .setSubject(email)
                 .setIssuedAt(Date.from(now))
                 .claim("userId", userId)
                 .setExpiration(Date.from(now.plus(MINUTES, ChronoUnit.MINUTES)))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .signWith(getSigningKey())
                 .compact();
     }
 
-    public static String extractUsername(String token) {
+    public String extractUsername(String token) {
         return getTokenBody(token).getSubject();
     }
 
-    public static Integer extractId(String token) throws InvalidTokenException {
+    public Integer extractId(String token) throws InvalidTokenException {
         try {
             Claims claims = getTokenBody(token);
             return claims.get("userId", Integer.class);
@@ -45,15 +69,15 @@ public class JWTUtils {
     }
 
 
-    public static Boolean validateToken(String token, UserDetails userDetails) {
+    public Boolean validateToken(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
     }
 
-    private static Claims getTokenBody(String token) {
+    private Claims getTokenBody(String token) {
         try {
             Jws<Claims> claimsJws = Jwts.parserBuilder()
-                    .setSigningKey(SECRET_KEY)
+                    .setSigningKey(getSigningKey())
                     .build()
                     .parseClaimsJws(token);
             return claimsJws.getBody();
@@ -62,8 +86,20 @@ public class JWTUtils {
         }
     }
 
-    private static boolean isTokenExpired(String token) {
+    private SecretKey getSigningKey() {
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret);
+        return Keys.hmacShaKeyFor(keyBytes);
+    }
+
+
+    private boolean isTokenExpired(String token) {
         Claims claims = getTokenBody(token);
         return claims.getExpiration().before(new Date());
     }
+
+
+
+
+
+
 }

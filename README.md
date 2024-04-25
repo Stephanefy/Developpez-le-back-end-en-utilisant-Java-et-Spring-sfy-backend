@@ -19,44 +19,35 @@ Before you begin, ensure you have the following installed:
 git clone https://github.com/Stephanefy/Developpez-le-back-end-en-utilisant-Java-et-Spring-sfy-backend.git
 ```
 
-2. **Navigate to the prohject**
+2. **Navigate to the project**
 ```
 cd Developpez-le-back-end-en-utilisant-Java-et-Spring-sfy-backend
 ```
+3. **Set environment variables**
 
-3. **Build the project**
-
-Use Maven to build and package the application.
+Whether you are using Eclipse or IntelliJ, edit your IDE configuration and set environment variables with these keys and run the application through the IDE.
+```
+DB_NAME=<your-database-name>
+DB_USERNAME=<your-database-admin-username>
+DB_PASSWORD=<your-database-password>
+JWT_SECRET=<base64-key>
+```
+tips: you can generate a random base64 key secured enought with this command :
+```
+openssl rand -base64 32
+```
 
 ```
 mvn clean install
 ```
 4. **Configure the application (including Database configuration)**
 
-Update the src/main/resources/application.properties file with your MySQL database credentials and any other configuration settings specific to your environment.
-
-For example:
-Configure your database connection settings in the application.properties or application.yml file in your src/main/resources directory. Specify details like the database URL, username, and password.
-For MySQL configuration in application : 
-```
-# hibernate config
-spring.jpa.hibernate.ddl-auto=create-drop
-spring.datasource.url=jdbc:mysql://localhost:3306/<dbName>
-spring.datasource.username=<dbUser>
-spring.datasource.password=<dbPassword>
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
-
-```
+Normally by setting the environment variables in your IDE and running through it you won't need to manually add credentials.
     
 
 
-### Running the application
+### Running the application through your IDE
 
-You can run the application using Maven command
-
-```
-mvn spring-boot:run
-```
 
 The application should now be running and accessible. By default, Spring Boot applications run on port 8080.
 

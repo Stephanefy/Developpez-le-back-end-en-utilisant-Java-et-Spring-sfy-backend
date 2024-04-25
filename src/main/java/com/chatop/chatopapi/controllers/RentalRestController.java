@@ -48,6 +48,9 @@ public class RentalRestController {
     @Autowired
     private StorageService storageService;
 
+    @Autowired
+    private JWTUtils jwtUtils;
+
     @Operation(
             summary = "Get all rental properties REST API",
             description = "This endpoint return all rental properties recorded in the database"
@@ -86,7 +89,7 @@ public class RentalRestController {
 
         // get owner_id in token
         String token = authorizationHeader.substring(7);
-        Integer ownerId = JWTUtils.extractId(token);
+        Integer ownerId = jwtUtils.extractId(token);
 
         logger.info("picture whereabout {}", picture);
 

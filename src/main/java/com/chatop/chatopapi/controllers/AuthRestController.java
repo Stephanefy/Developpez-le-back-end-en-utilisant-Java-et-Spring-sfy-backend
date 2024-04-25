@@ -53,6 +53,9 @@ public class AuthRestController {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    JWTUtils jwtUtils;
+
     @Operation(
             summary = "Register Authentication REST API",
             description = "Register User REST API is used to save user in the database and generate a JWT token that is return in the response"
@@ -67,7 +70,7 @@ public class AuthRestController {
 
         User convertedUserDto = convertToUserEntity(registerDto);
         User registeredUser = authService.register(convertedUserDto);
-        String token = JWTUtils.generateToken(registeredUser.getEmail(), registeredUser.getUsername(), registeredUser.getId());
+        String token = jwtUtils.generateToken(registeredUser.getEmail(), registeredUser.getUsername(), registeredUser.getId());
         TokenResponse tokenResponse = new TokenResponse(token);
 
         return ResponseEntity.ok(tokenResponse);
@@ -90,7 +93,7 @@ public class AuthRestController {
             throw e;
         }
         User loggedInUser = userService.getUserDetails(loginDto.getLogin());
-        String token = JWTUtils.generateToken(loggedInUser.getEmail(), loggedInUser.getUsername(), loggedInUser.getId());
+        String token = jwtUtils.generateToken(loggedInUser.getEmail(), loggedInUser.getUsername(), loggedInUser.getId());
         TokenResponse tokenResponse = new TokenResponse(token);
 
 
@@ -113,7 +116,7 @@ public class AuthRestController {
             String token = authorizationHeader.substring(7);
             // get userId in token
             logger.info("{}", token);
-            Integer userId = JWTUtils.extractId(token);
+            Integer userId = jwtUtils.extractId(token);
             Optional<User> currentUser = userService.getUserById(userId);
 
             if (currentUser.isPresent()) {

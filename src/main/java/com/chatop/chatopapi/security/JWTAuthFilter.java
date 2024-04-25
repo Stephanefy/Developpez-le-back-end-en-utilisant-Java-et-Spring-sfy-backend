@@ -41,6 +41,10 @@ public class JWTAuthFilter extends OncePerRequestFilter {
     @Qualifier("handlerExceptionResolver")
     private HandlerExceptionResolver resolver;
 
+
+    @Autowired
+    JWTUtils jwtUtils;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
@@ -63,7 +67,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
 
                 token = authHeader.substring(7);
-                username = JWTUtils.extractUsername(token);
+                username = jwtUtils.extractUsername(token);
             }
 
             // If the accessToken is null. It will pass the request to next filter in the chain.
@@ -76,7 +80,7 @@ public class JWTAuthFilter extends OncePerRequestFilter {
 //       If any accessToken is present, then it will validate the token and then authenticate the request in security context
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                if (JWTUtils.validateToken(token, userDetails)) {
+                if (jwtUtils.validateToken(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, null, null);
                     authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
